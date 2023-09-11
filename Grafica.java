@@ -39,7 +39,7 @@ public class Grafica {
 
     public Vertice getVerticePorValor(String value) {
         for (Vertice v : this.vertices) {
-            if (v.getData() == value) {
+            if (v.getData().equals(value)) {
                 return v;
             }
         }
