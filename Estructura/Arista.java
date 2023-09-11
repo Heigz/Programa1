@@ -25,4 +25,9 @@ public class Arista {
         this.cabeza = cabeza;
     }
 
+    @Override
+    public String toString() {
+        return this.cola + "-->" + this.cabeza;
+    }
+
 }
