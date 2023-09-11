@@ -42,15 +42,14 @@ public class Vertice {
         String forma = "";
 
         for (int i = 0; i < this.aristas.size(); i++) {
-            if (i == 0) {
-                forma += this.aristas.get(i).getCola().data + " --> ";
-            }
 
-            forma += this.aristas.get(i).getCabeza().data;
+            forma += this.aristas.get(i).getCola().data + " --> ";
 
-            if (i != this.aristas.size() - 1) {
-                forma += ", ";
-            }
+            forma += this.aristas.get(i).getCabeza().data + "\n";
+
+            // if (i != this.aristas.size() - 1) {
+            // forma += ", ";
+            // }
         }
         System.out.println(forma);
     }
