@@ -102,6 +102,7 @@ public class Main {
                     problema.addArista(problema.getVerticePorValor(colas.get(i)),
                             problema.getVerticePorValor(cabezas.get(i)));
                 }
+                System.out.println(problema.getVerticePorValor("3").getAristas().toString());
                 problema.print();
             } else {
                 System.out.println(

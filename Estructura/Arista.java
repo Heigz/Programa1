@@ -27,7 +27,7 @@ public class Arista {
 
     @Override
     public String toString() {
-        return this.cola + "-->" + this.cabeza;
+        return this.cola.getData() + "-->" + this.cabeza.getData();
     }
 
 }
