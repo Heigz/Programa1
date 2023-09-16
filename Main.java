@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,6 +16,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import Programa1.Estructura.*;
+import Programa1.Grafica;
 
 public class Main {
 
@@ -80,6 +82,8 @@ public class Main {
                     }
                 }
 
+                // =============================================================
+
                 // Para remover los nulls de los Arrays:
 
                 List<String> colas = new ArrayList<String>();
@@ -94,6 +98,7 @@ public class Main {
                         cabezas.add(etiqueta);
                     }
                 }
+                // =================================================
 
                 Grafica problema = new Grafica(verticesTrans);// Se le pasan los vertices a la grafica
 
@@ -104,6 +109,20 @@ public class Main {
                 }
                 System.out.println(problema.getVerticePorValor("3").getAristas().toString());
                 problema.print();
+                System.out.println(problema.getVertices().toString());
+
+                Grafica conjuntoBueno = problema;
+                for (int i = 0; i < colas.size(); i++) {// Se agregan todas las aristas a la grafica, haciendo que ya
+                                                        // sea la grafica que se pasa en el archivo
+                    conjuntoBueno.addArista(problema.getVerticePorValor(colas.get(i)),
+                            problema.getVerticePorValor(cabezas.get(i)));
+                }
+
+                conjuntoBueno.conjuntoIndependiente(conjuntoBueno);
+                System.out.println("=========================================");
+
+                System.out.println(conjuntoBueno.getVertices().toString());
+
             } else {
                 System.out.println(
                         "Favor de ingresar un archivo con una grafica definida por un conjunto de vertices en una sola linea y al terminar de definir sus vertices poner con saltos de linea duplas formadas por vertices las cuales representaran la conexion que hay entre si (aristas)");
@@ -118,4 +137,5 @@ public class Main {
         }
 
     }
+
 }

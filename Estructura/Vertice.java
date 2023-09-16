@@ -54,4 +54,32 @@ public class Vertice {
         System.out.println(forma);
     }
 
+    public ArrayList<Vertice> getVecindad() {
+
+        ArrayList<Vertice> vecindad = new ArrayList<>();
+        for (int i = 0; i < this.getAristas().size(); i++) {
+            if (this.data == this.getAristas().get(i).getCola().getData()) {
+                vecindad.add(this.getAristas().get(i).getCabeza());
+            }
+        }
+        return vecindad;
+    }
+
+    // public boolean esVecino(Vertice uno, Vertice dos) {// Return false si no
+    // existe una arista entre 2 vertices sin
+    // // importar su direccion
+    // ArrayList<Vertice> vecindad = uno.getVecindad();
+    // for (int i = 0; i < vecindad.size(); i++) {
+    // if (dos.equals(vecindad.get(i))) {
+    // return true;
+    // }
+    // }
+    // return false;
+    // }
+
+    @Override
+    public String toString() {
+        return data;
+    }
+
 }
