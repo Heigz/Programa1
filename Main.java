@@ -40,7 +40,7 @@ public class Main {
         String aristasIniciales;
 
         try {
-            reader = new BufferedReader(new FileReader("input.txt"));
+            reader = new BufferedReader(new FileReader("Programa1/input.txt"));
             reader.mark(1);// Marca el inicio de mi input file
             if (reader.readLine() != null) {
                 reader.reset();// Para que lea de nuevo desde la primera linea
