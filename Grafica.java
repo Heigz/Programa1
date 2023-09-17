@@ -62,6 +62,8 @@ public class Grafica {
 
                 System.out.println("Caso base: ");
                 System.out.println(nueva.getVertices().toString());
+                System.out.println(verticeTop);
+                System.out.println(original.esVecino(verticeTop, nueva.getVertices()));
                 System.out.println(verticeTop + " es vecino de los vertices " + nueva.getVertices().toString() + "? "
                         + (original.esVecino(verticeTop, nueva.getVertices())));
 

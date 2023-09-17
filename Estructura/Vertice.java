@@ -69,7 +69,12 @@ public class Vertice {
                                              // importar su direccion
         ArrayList<Vertice> vecindad = this.getVecindad();
         for (int i = 0; i < vecindad.size(); i++) {
-            if (dos.getData() == this.getVecindad().get(i).getData() || dos.getAristas().get(i).getCabeza() == this) {
+            if (dos.getData() == this.getVecindad().get(i).getData()) {
+                return true;
+            }
+        }
+        for (int i = 0; i < dos.getAristas().size(); i++) {
+            if (dos.getAristas().get(i).getCabeza() == this) {
                 return true;
             }
         }
