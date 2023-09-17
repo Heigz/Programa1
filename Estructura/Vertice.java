@@ -65,17 +65,18 @@ public class Vertice {
         return vecindad;
     }
 
-    // public boolean esVecino(Vertice uno, Vertice dos) {// Return false si no
-    // existe una arista entre 2 vertices sin
-    // // importar su direccion
-    // ArrayList<Vertice> vecindad = uno.getVecindad();
-    // for (int i = 0; i < vecindad.size(); i++) {
-    // if (dos.equals(vecindad.get(i))) {
-    // return true;
-    // }
-    // }
-    // return false;
-    // }
+    public boolean esAdyacente(Vertice dos) {// Return false si no existe una arista entre 2 vertices sin
+                                             // importar su direccion
+        ArrayList<Vertice> vecindad = this.getVecindad();
+        for (int i = 0; i < vecindad.size(); i++) {
+            if (dos.getData() == this.getVecindad().get(i).getData() || dos.getAristas().get(i).getCabeza() == this) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
 
     @Override
     public String toString() {

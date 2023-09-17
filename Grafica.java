@@ -1,6 +1,8 @@
 package Programa1;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
 
 import Programa1.Estructura.*;
@@ -9,9 +11,24 @@ public class Grafica {
 
     private ArrayList<Vertice> vertices;
     private ArrayList<Arista> aristas;
-    Stack<Vertice> stack = new Stack<Vertice>();
-    Grafica sustituta;// Se inicializa una grafica sustituta con los mismos vertices que la grafica
-                      // inicial u original
+
+    public Grafica copiarGrafica() {
+        Grafica copia = new Grafica(); // Crea una nueva instancia para la copia
+
+        // Copia los vértices
+        for (Vertice vertice : this.vertices) {
+            copia.addVertice(vertice.getData());
+        }
+
+        // Copia las aristas
+        for (Arista arista : this.aristas) {
+            Vertice cola = copia.getVerticePorValor(arista.getCola().getData());
+            Vertice cabeza = copia.getVerticePorValor(arista.getCabeza().getData());
+            copia.addArista(cola, cabeza);
+        }
+
+        return copia;
+    }
 
     public Vertice getRandomVertice(ArrayList<Vertice> vertices) {
         int min = 0;
@@ -21,75 +38,70 @@ public class Grafica {
         return this.vertices.get(randomInt);
     }
 
-    public boolean esVecino(Vertice uno, Vertice dos) {// Return false si no existe una arista entre 2 vertices sin
-                                                       // importar su direccion
-        ArrayList<Vertice> vecindad = uno.getVecindad();
-        ArrayList<Vertice> vecindad2 = dos.getVecindad();
-        for (int i = 0; i < vecindad.size(); i++) {
-            if (dos.equals(vecindad.get(i))) {
-                return true;
-            }
-        }
-
-        for (int i = 0; i < vecindad2.size(); i++) {
-            if (uno.equals(vecindad2.get(i))) {
+    public boolean esVecino(Vertice vertice, ArrayList<Vertice> listaVertices) {
+        for (int i = 0; i < listaVertices.size(); i++) {
+            if (vertice.esAdyacente(listaVertices.get(i))) {
                 return true;
             }
         }
         return false;
     }
 
-    public Grafica conjuntoIndependiente(Grafica graficaInicial) {
-        sustituta = graficaInicial;
+    public Grafica conjuntoIndependiente(Grafica original, Grafica graficaInicial, Stack<Vertice> verticesEliminados) {
         Grafica nueva = new Grafica();
-        nueva.setVertices(this.getVertices());
-        nueva.setAristas(this.getAristas());
-        ArrayList<Vertice> verticesSustitutos = sustituta.getVertices();
-        System.out.println("Vertices sustitutos es igual a " + verticesSustitutos.toString());
+        nueva.setAristas(new ArrayList<>(graficaInicial.getAristas()));
+        nueva.setVertices(new ArrayList<>(graficaInicial.getVertices()));
 
-        // Caso base:
-        if (sustituta.getVertices().size() == 1) {
-            do {
-                Vertice verticeTop = stack.pop();// saco al ultimo elemento de la lista para ver si existe una arista
-                                                 // entre
-                                                 // el si existe entonces no se agrega esa a la sustituta. Si no existe
-                                                 // arista significa que lo puedo agregar
+        if (nueva.vertices.size() == 1) {// Caso base
 
-                verticeTop.getAristas();
-                System.out.println("aveeeeeeer " + verticeTop.getAristas().toString());
-                if (esVecino(verticeTop, nueva.getVertices().get(0)) == false
-                        || esVecino(nueva.getVertices().get(0), verticeTop) == false) {
-                    System.err.println("No existe la arista: " + verticeTop + " -- " + sustituta.getVertices().get(0));
-                    sustituta.addVertice(verticeTop.getData());// No hay adyacencia entonces se agrega al conjunto
-                                                               // independiente
+            while (!verticesEliminados.isEmpty()) {
+                boolean bandera = false;
+                System.out.println("Pila: " + Arrays.toString(verticesEliminados.toArray()));
+                System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                Vertice verticeTop = verticesEliminados.peek();
 
-                } else {
-                    if (!stack.isEmpty())
-                        stack.pop();
+                System.out.println("Caso base: ");
+                System.out.println(nueva.getVertices().toString());
+                System.out.println(verticeTop + " es vecino de los vertices " + nueva.getVertices().toString() + "? "
+                        + (original.esVecino(verticeTop, nueva.getVertices())));
+
+                if (original.esVecino(verticeTop, nueva.getVertices()) == true) {
+                    bandera = true;// si hay alguien vecino con los que ya estan en la nueva grafica(la
+                                   // independiente)
+                    System.out.println(" Entonces no se agregan a la nueva grafica");
+                    verticesEliminados.pop();// saco ese elemento sin agregarlo
+
                 }
-            } while (!stack.isEmpty());
 
-        } else {
-            Vertice verticeARemover = getRandomVertice(verticesSustitutos);
+                if (bandera == false) {
+
+                    nueva.addVertice(verticeTop);
+                    verticesEliminados.pop();
+                }
+                System.out.println("La nuevaNueva " + nueva.getVertices());
+            }
+            return nueva;
+        } else
+
+        {// Paso inductivo
+            Vertice verticeARemover = getRandomVertice(nueva.getVertices());
             System.out.println("Vertice a remover: " + verticeARemover.toString());
             // Tengo que quitar tambien la vecindad de vertice a remover
-            ArrayList<Vertice> vecindadARemover = verticeARemover.getVecindad();
-            stack.push(verticeARemover);
-            sustituta.removeVertice(verticeARemover);
+            ArrayList<Vertice> vecindadARemover = new ArrayList<>(verticeARemover.getVecindad());
+            verticesEliminados.push(verticeARemover);
+            nueva.removeVertice(verticeARemover);
             for (int i = 0; i < vecindadARemover.size(); i++) {
 
-                sustituta.removeVertice(vecindadARemover.get(i));
-                if (sustituta.vertices.size() == 0) {
-                    sustituta.addVertice(vecindadARemover.get(0).getData());
-                    conjuntoIndependiente(sustituta);
+                nueva.removeVertice(vecindadARemover.get(i));
+                if (nueva.vertices.size() == 0) {
+                    nueva.addVertice(vecindadARemover.get(i).getData());
+                    verticesEliminados.push(verticeARemover);
                 }
             }
 
-            conjuntoIndependiente(sustituta);
-
+            System.out.println("Grafica despues de eliminar vertices: " + nueva.getVertices().toString());
         }
-
-        return sustituta;
+        return nueva.conjuntoIndependiente(original, nueva, verticesEliminados);
     }
 
     public Grafica() {
@@ -111,6 +123,11 @@ public class Grafica {
         Vertice newVertice = new Vertice(data);
         this.vertices.add(newVertice);
         return newVertice;
+    }
+
+    public Vertice addVertice(Vertice vertice) {
+        this.vertices.add(vertice);
+        return vertice;
     }
 
     public void addArista(Vertice cola, Vertice cabeza) {

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -107,21 +108,15 @@ public class Main {
                     problema.addArista(problema.getVerticePorValor(colas.get(i)),
                             problema.getVerticePorValor(cabezas.get(i)));
                 }
-                System.out.println(problema.getVerticePorValor("3").getAristas().toString());
-                problema.print();
+
+                Grafica conjuntoBueno = new Grafica();
+                conjuntoBueno.setVertices(problema.getVertices());
+
+                conjuntoBueno.setAristas(problema.getAristas());
                 System.out.println(problema.getVertices().toString());
-
-                Grafica conjuntoBueno = problema;
-                for (int i = 0; i < colas.size(); i++) {// Se agregan todas las aristas a la grafica, haciendo que ya
-                                                        // sea la grafica que se pasa en el archivo
-                    conjuntoBueno.addArista(problema.getVerticePorValor(colas.get(i)),
-                            problema.getVerticePorValor(cabezas.get(i)));
-                }
-
-                conjuntoBueno.conjuntoIndependiente(conjuntoBueno);
-                System.out.println("=========================================");
-
-                System.out.println(conjuntoBueno.getVertices().toString());
+                Stack<Vertice> probando = new Stack<>();
+                problema.conjuntoIndependiente(problema, conjuntoBueno, probando);
+                // System.out.println("Resultado " + conjuntoBueno.getVertices().toString());
 
             } else {
                 System.out.println(
